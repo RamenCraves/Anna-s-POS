@@ -22,7 +22,7 @@ namespace Anna_s_POS
             Database = excel.Workbooks.Add();
             var actsheet = (Excel.Worksheet)Database.ActiveSheet;
             actsheet.Columns["A:G"].ColumnWidth = 17;
-            List<string> headings = new List<string>(new string[] { "Job Date", "Job Entry", "Category", "Start Time", "Time Completed", "Break Time", "Comments" });
+            List<string> headings = new List<string>(new string[] { "Job Date", "Job Entry", "Category", "Start Time", "Time Completed", "Break Time", "Comments", "Final Job Time" });
             int rows = 1, cols = 1;
 
             for (int i = 0; i < headings.Count(); i++)
@@ -39,8 +39,9 @@ namespace Anna_s_POS
         public static void OpenDatabase(string fileName)
         {
             excel = new Excel.Application();
-            Database = excel.Workbooks.Open(fileName);
+            Database = excel.Workbooks.Open(fileName, ReadOnly:false, CorruptLoad: true);
             var actsheet = (Excel.Worksheet)Database.ActiveSheet;
+            actsheet.Unprotect();
             excel.Visible = true;
 
         }

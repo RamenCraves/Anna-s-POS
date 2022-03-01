@@ -21,7 +21,9 @@ namespace Anna_s_POS
         public string breakTime = "";
         public Single finalJobTime = 0;
         public int calculatedBreakTime = 0;
-        public POSService()
+        public string[] searchEntry = new string[8] { "", "", "", "", "", "", "", "" };
+        
+            public POSService()
         {
             InitializeComponent();
         }
@@ -87,7 +89,7 @@ namespace Anna_s_POS
         private void submitEntry_Click(object sender, EventArgs e)
         {
             Excel.Worksheet actsheet = excel.ActiveWorkbook.ActiveSheet;
-            List<string> entry = new List<string>(new string[] { jobDate.Text, jobName.Text, categoryList.Text, startTime1.Text, timeCompleted1.Text, calculatedBreakTime.ToString(), commentBox.Text });
+            List<string> entry = new List<string>(new string[] { jobDate.Text, jobName.Text, categoryList.Text, startTime1.Text, timeCompleted1.Text, calculatedBreakTime.ToString(), commentBox.Text, finalJobTime.ToString() });
 
 
             var usedRows = excel.WorksheetFunction.CountA(actsheet.Columns[1]);
@@ -117,46 +119,125 @@ namespace Anna_s_POS
             startTime1.Text = "";
             timeCompleted1.Text = "";
             commentBox.Text = "";
+            breakStart1.Text = "";
+            breakEnd1.Text = "";
         }
-        private void jobTimeCalculation(object sender, System.EventArgs e)
+        public void jobTimeCalculation(object sender, System.EventArgs e)
         {
-            var calculatedBreakTime = 0;
             if (startTime1.Text == "" || timeCompleted1.Text == "")
             {
+                calculatedBreakTime = 0;
                 return;
             }
             if (breakEnd1.Text == "" && breakStart1.Text != "" || breakEnd1.Text != "" && breakStart1.Text == "")
             {
-
+                calculatedBreakTime = 0;
+                return;
             }
             else if (breakEnd1.Text != "" && breakStart1.Text != "")
             {
-                calculatedBreakTime = Convert.ToInt32(breakEnd1.Text) - Convert.ToInt32(breakStart1.Text);              
+                calculatedBreakTime = Convert.ToInt32(breakEnd1.Text) - Convert.ToInt32(breakStart1.Text);
             }
-            Single calculatedJobTime =  Convert.ToInt32(timeCompleted1.Text)- Convert.ToInt32(startTime1.Text) - calculatedBreakTime;
+            Single calculatedJobTime = Convert.ToInt32(timeCompleted1.Text) - Convert.ToInt32(startTime1.Text) - calculatedBreakTime;
             jobEntry.Refresh();
             int hours = Convert.ToByte(calculatedJobTime / 100);
             var min = (calculatedJobTime - hours * 100) / 60;
             finalJobTime = hours + min;
-/*           Label label = new Label();
-           //label.Text = "Job Time: " + finalJobTime.ToString() + " hours"; //TODO: have total job hours displayed
-            label.Font = new Font("Times New Roman", 9);
-            label.Location = new System.Drawing.Point(450, 145);
-            jobEntry.Controls.Add(label);*/
+            /*           Label label = new Label();
+                       //label.Text = "Job Time: " + finalJobTime.ToString() + " hours"; //TODO: have total job hours displayed
+                        label.Font = new Font("Times New Roman", 9);
+                        label.Location = new System.Drawing.Point(450, 145);
+                        jobEntry.Controls.Add(label);*/
         }
 
         private void completedSearch_Click(object sender, EventArgs e)
         {
-            Excel.Worksheet actsheet = excel.ActiveWorkbook.ActiveSheet;
-            var usedRows = excel.WorksheetFunction.CountA(actsheet.Columns[1]);
-            for (int i = 0; i> usedRows;  i++)
-            {
-
-            }
+            completedJobsList.Items.Clear();
+            FillinSearch(completedStart.Text, completedEnd.Text);
 
         }
+        /*completedJobsList.Refresh();*/
+
+        private void saveDatabase_Click(object sender, EventArgs e)
+        {
+            excelCommands.SaveDatabase();
+        }
+
+        private void FillinSearch(string startDate, string endDate)
+        {
+            Excel.Worksheet actsheet = excel.ActiveWorkbook.ActiveSheet;
+            var usedRows = excel.WorksheetFunction.CountA(actsheet.Columns[1]);
+            string[] listStartSearch = startDate.Split('/');
+            string[] listEndSearch = endDate.Split('/');
+            DateTime startSearch = new DateTime(Convert.ToInt32(listStartSearch[2]), Convert.ToInt32(listStartSearch[1]), Convert.ToInt32(listStartSearch[0]));
+            DateTime endSearch = new DateTime(Convert.ToInt32(listEndSearch[2]), Convert.ToInt32(listEndSearch[1]), Convert.ToInt32(listEndSearch[0]));
+
+            List<int> successfulSearches = new List<int>();
+
+
+            for (int i = 2; i < usedRows + 1; i++)
+            {
+                var strSearchDate = actsheet.Cells[i, 1].Value;
+                string[] listSearchDate = strSearchDate.Split('/');
+                DateTime searchDate = new DateTime(Convert.ToInt32(listSearchDate[2]), Convert.ToInt32(listSearchDate[1]), Convert.ToInt32(listSearchDate[0]));
+
+                if (startSearch <= searchDate && searchDate <= endSearch)
+                {
+                    successfulSearches.Add(i);
+                }
+
+            }
+            /*string trial = (actsheet.Cells[2, 1].Value).ToString();*/
+            foreach (int entryPos in successfulSearches)
+            {
+                for (int pos = 1; pos <= 8; pos++)
+                {
+                    searchEntry[pos - 1] = (actsheet.Cells[entryPos, pos].Value).ToString();
+                }
+                completedJobsList.Items.Add(new ListViewItem(new[] { searchEntry[0], searchEntry[1], searchEntry[2], searchEntry[3], searchEntry[4], searchEntry[5], searchEntry[6], searchEntry[7] }));
+
+            }
+        }
+
+        private void PrintSetup_Click(object sender, EventArgs e)
+        {
+            PageSetupDialog PageSetupDialog1 = new PageSetupDialog();
+            PageSetupDialog1.PageSettings = new System.Drawing.Printing.PageSettings();
+            PageSetupDialog1.PrinterSettings = new System.Drawing.Printing.PrinterSettings();
+            PageSetupDialog1.ShowNetwork = false;
+            DialogResult result = PageSetupDialog1.ShowDialog();
+
+            if (result == DialogResult.OK)
+    {
+        object[] results = new object[]{ 
+            PageSetupDialog1.PageSettings.Margins, 
+            PageSetupDialog1.PageSettings.PaperSize, 
+            PageSetupDialog1.PageSettings.Landscape, 
+            PageSetupDialog1.PrinterSettings.PrinterName, 
+            PageSetupDialog1.PrinterSettings.PrintRange};
+/*        ListBox1.Items.AddRange(results);*/
     }
-  }
+        }
+
+        private void Print_Click(object sender, EventArgs e)
+        {
+            PrintDialog dlg = new PrintDialog();
+            dlg.Document = printDocument1;
+            DialogResult result = dlg.ShowDialog();
+
+            if(result == DialogResult.OK)
+            {
+                printDocument1.Print();
+            }
+        }
+
+        private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            Font printFont = new Font("Times New Roman", 12);
+            e.Graphics.DrawString("Sample String", printFont, Brushes.Black, e.MarginBounds.Left, e.MarginBounds.Top, new StringFormat());
+        }
+    }
+}
 
 
 

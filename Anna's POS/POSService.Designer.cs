@@ -28,10 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(POSService));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.jobEntry = new System.Windows.Forms.TabPage();
+            this.saveDatabase = new System.Windows.Forms.Button();
+            this.categoryList = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.jobDate = new System.Windows.Forms.DateTimePicker();
             this.closeDatabase = new System.Windows.Forms.Button();
             this.openDatabase = new System.Windows.Forms.Button();
             this.newDatabase = new System.Windows.Forms.Button();
@@ -50,29 +54,30 @@
             this.jobName = new System.Windows.Forms.TextBox();
             this.jobNameLabel = new System.Windows.Forms.Label();
             this.completedJobs = new System.Windows.Forms.TabPage();
-            this.billing = new System.Windows.Forms.TabPage();
-            this.jobDate = new System.Windows.Forms.DateTimePicker();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.startPeriod = new System.Windows.Forms.DateTimePicker();
-            this.endPeriod = new System.Windows.Forms.DateTimePicker();
-            this.billingSearch = new System.Windows.Forms.Button();
-            this.categoryList = new System.Windows.Forms.ComboBox();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.Print = new System.Windows.Forms.Button();
+            this.PrintSetup = new System.Windows.Forms.Button();
+            this.completedSearch = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.completedEnd = new System.Windows.Forms.DateTimePicker();
+            this.completedStart = new System.Windows.Forms.DateTimePicker();
             this.completedJobsList = new System.Windows.Forms.ListView();
             this.listJobDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.listCategory = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listJobEntry = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listCategory = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listStartTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listTimeCompleted = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listBreakTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listComments = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.completedStart = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.completedSearch = new System.Windows.Forms.Button();
+            this.billing = new System.Windows.Forms.TabPage();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.billingSearch = new System.Windows.Forms.Button();
+            this.billingEnd = new System.Windows.Forms.DateTimePicker();
+            this.billingStart = new System.Windows.Forms.DateTimePicker();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.printDocument1 = new System.Drawing.Printing.PrintDocument();
+            this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.tabControl1.SuspendLayout();
             this.jobEntry.SuspendLayout();
             this.completedJobs.SuspendLayout();
@@ -92,6 +97,7 @@
             // 
             // jobEntry
             // 
+            this.jobEntry.Controls.Add(this.saveDatabase);
             this.jobEntry.Controls.Add(this.categoryList);
             this.jobEntry.Controls.Add(this.label2);
             this.jobEntry.Controls.Add(this.jobDate);
@@ -120,9 +126,51 @@
             this.jobEntry.Text = "Job Entry";
             this.jobEntry.UseVisualStyleBackColor = true;
             // 
+            // saveDatabase
+            // 
+            this.saveDatabase.Location = new System.Drawing.Point(658, 344);
+            this.saveDatabase.Name = "saveDatabase";
+            this.saveDatabase.Size = new System.Drawing.Size(137, 34);
+            this.saveDatabase.TabIndex = 26;
+            this.saveDatabase.Text = "Save Database";
+            this.saveDatabase.UseVisualStyleBackColor = true;
+            this.saveDatabase.Click += new System.EventHandler(this.saveDatabase_Click);
+            // 
+            // categoryList
+            // 
+            this.categoryList.FormattingEnabled = true;
+            this.categoryList.Items.AddRange(new object[] {
+            "Internal Equiries",
+            "External Equiries",
+            "Training",
+            "Team Events",
+            "Planning"});
+            this.categoryList.Location = new System.Drawing.Point(23, 188);
+            this.categoryList.Name = "categoryList";
+            this.categoryList.Size = new System.Drawing.Size(236, 24);
+            this.categoryList.TabIndex = 25;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(17, 91);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(65, 16);
+            this.label2.TabIndex = 24;
+            this.label2.Text = "Job Date:";
+            // 
+            // jobDate
+            // 
+            this.jobDate.CustomFormat = "dd/MM/yyyy";
+            this.jobDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.jobDate.Location = new System.Drawing.Point(23, 118);
+            this.jobDate.Name = "jobDate";
+            this.jobDate.Size = new System.Drawing.Size(236, 22);
+            this.jobDate.TabIndex = 23;
+            // 
             // closeDatabase
             // 
-            this.closeDatabase.Location = new System.Drawing.Point(658, 344);
+            this.closeDatabase.Location = new System.Drawing.Point(658, 384);
             this.closeDatabase.Name = "closeDatabase";
             this.closeDatabase.Size = new System.Drawing.Size(137, 34);
             this.closeDatabase.TabIndex = 22;
@@ -275,10 +323,12 @@
             // 
             // completedJobs
             // 
+            this.completedJobs.Controls.Add(this.Print);
+            this.completedJobs.Controls.Add(this.PrintSetup);
             this.completedJobs.Controls.Add(this.completedSearch);
             this.completedJobs.Controls.Add(this.label6);
             this.completedJobs.Controls.Add(this.label5);
-            this.completedJobs.Controls.Add(this.dateTimePicker2);
+            this.completedJobs.Controls.Add(this.completedEnd);
             this.completedJobs.Controls.Add(this.completedStart);
             this.completedJobs.Controls.Add(this.completedJobsList);
             this.completedJobs.Location = new System.Drawing.Point(4, 25);
@@ -289,100 +339,71 @@
             this.completedJobs.Text = "Completed Jobs";
             this.completedJobs.UseVisualStyleBackColor = true;
             // 
-            // billing
+            // Print
             // 
-            this.billing.Controls.Add(this.listView1);
-            this.billing.Controls.Add(this.billingSearch);
-            this.billing.Controls.Add(this.endPeriod);
-            this.billing.Controls.Add(this.startPeriod);
-            this.billing.Controls.Add(this.label4);
-            this.billing.Controls.Add(this.label3);
-            this.billing.Location = new System.Drawing.Point(4, 25);
-            this.billing.Name = "billing";
-            this.billing.Size = new System.Drawing.Size(846, 496);
-            this.billing.TabIndex = 2;
-            this.billing.Text = "Billing";
-            this.billing.UseVisualStyleBackColor = true;
+            this.Print.Location = new System.Drawing.Point(697, 51);
+            this.Print.Name = "Print";
+            this.Print.Size = new System.Drawing.Size(125, 27);
+            this.Print.TabIndex = 7;
+            this.Print.Text = "Print";
+            this.Print.UseVisualStyleBackColor = true;
+            this.Print.Click += new System.EventHandler(this.Print_Click);
             // 
-            // jobDate
+            // PrintSetup
             // 
-            this.jobDate.Location = new System.Drawing.Point(23, 118);
-            this.jobDate.Name = "jobDate";
-            this.jobDate.Size = new System.Drawing.Size(236, 22);
-            this.jobDate.TabIndex = 23;
+            this.PrintSetup.Location = new System.Drawing.Point(697, 18);
+            this.PrintSetup.Name = "PrintSetup";
+            this.PrintSetup.Size = new System.Drawing.Size(125, 27);
+            this.PrintSetup.TabIndex = 6;
+            this.PrintSetup.Text = "Print Setup";
+            this.PrintSetup.UseVisualStyleBackColor = true;
+            this.PrintSetup.Click += new System.EventHandler(this.PrintSetup_Click);
             // 
-            // label2
+            // completedSearch
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(17, 91);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 16);
-            this.label2.TabIndex = 24;
-            this.label2.Text = "Job Date:";
+            this.completedSearch.Location = new System.Drawing.Point(701, 422);
+            this.completedSearch.Name = "completedSearch";
+            this.completedSearch.Size = new System.Drawing.Size(133, 36);
+            this.completedSearch.TabIndex = 5;
+            this.completedSearch.Text = "Search";
+            this.completedSearch.UseVisualStyleBackColor = true;
+            this.completedSearch.Click += new System.EventHandler(this.completedSearch_Click);
             // 
-            // label3
+            // label6
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(638, 19);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(80, 16);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Start Period:";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(701, 338);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(77, 16);
+            this.label6.TabIndex = 4;
+            this.label6.Text = "End Period:";
             // 
-            // label4
+            // label5
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(638, 81);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(77, 16);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "End Period:";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(698, 274);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(80, 16);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "Start Period:";
             // 
-            // startPeriod
+            // completedEnd
             // 
-            this.startPeriod.Location = new System.Drawing.Point(641, 38);
-            this.startPeriod.Name = "startPeriod";
-            this.startPeriod.Size = new System.Drawing.Size(190, 22);
-            this.startPeriod.TabIndex = 2;
+            this.completedEnd.CustomFormat = "dd/MM/yyyy";
+            this.completedEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.completedEnd.Location = new System.Drawing.Point(701, 357);
+            this.completedEnd.Name = "completedEnd";
+            this.completedEnd.Size = new System.Drawing.Size(121, 22);
+            this.completedEnd.TabIndex = 2;
             // 
-            // endPeriod
+            // completedStart
             // 
-            this.endPeriod.Location = new System.Drawing.Point(641, 100);
-            this.endPeriod.Name = "endPeriod";
-            this.endPeriod.Size = new System.Drawing.Size(187, 22);
-            this.endPeriod.TabIndex = 3;
-            // 
-            // billingSearch
-            // 
-            this.billingSearch.Location = new System.Drawing.Point(641, 178);
-            this.billingSearch.Name = "billingSearch";
-            this.billingSearch.Size = new System.Drawing.Size(144, 32);
-            this.billingSearch.TabIndex = 4;
-            this.billingSearch.Text = "Search";
-            this.billingSearch.UseVisualStyleBackColor = true;
-            // 
-            // categoryList
-            // 
-            this.categoryList.FormattingEnabled = true;
-            this.categoryList.Items.AddRange(new object[] {
-            "Internal Equiries",
-            "External Equiries",
-            "Training",
-            "Team Events",
-            "Planning"});
-            this.categoryList.Location = new System.Drawing.Point(23, 188);
-            this.categoryList.Name = "categoryList";
-            this.categoryList.Size = new System.Drawing.Size(236, 24);
-            this.categoryList.TabIndex = 25;
-            // 
-            // listView1
-            // 
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(37, 19);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(577, 459);
-            this.listView1.TabIndex = 5;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.completedStart.CustomFormat = "dd/MM/yyyy";
+            this.completedStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.completedStart.Location = new System.Drawing.Point(701, 293);
+            this.completedStart.Name = "completedStart";
+            this.completedStart.Size = new System.Drawing.Size(121, 22);
+            this.completedStart.TabIndex = 1;
             // 
             // completedJobsList
             // 
@@ -396,7 +417,7 @@
             this.listComments});
             this.completedJobsList.HideSelection = false;
             this.completedJobsList.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
+            listViewItem2});
             this.completedJobsList.Location = new System.Drawing.Point(19, 18);
             this.completedJobsList.Name = "completedJobsList";
             this.completedJobsList.Size = new System.Drawing.Size(661, 451);
@@ -409,15 +430,15 @@
             this.listJobDate.Text = "Job Date";
             this.listJobDate.Width = 80;
             // 
-            // listCategory
-            // 
-            this.listCategory.Text = "Category";
-            this.listCategory.Width = 100;
-            // 
             // listJobEntry
             // 
             this.listJobEntry.Text = "Job Entry";
             this.listJobEntry.Width = 120;
+            // 
+            // listCategory
+            // 
+            this.listCategory.Text = "Category";
+            this.listCategory.Width = 100;
             // 
             // listStartTime
             // 
@@ -439,47 +460,82 @@
             this.listComments.Text = "Comments";
             this.listComments.Width = 120;
             // 
-            // completedStart
+            // billing
             // 
-            this.completedStart.Location = new System.Drawing.Point(686, 75);
-            this.completedStart.Name = "completedStart";
-            this.completedStart.Size = new System.Drawing.Size(146, 22);
-            this.completedStart.TabIndex = 1;
+            this.billing.Controls.Add(this.listView1);
+            this.billing.Controls.Add(this.billingSearch);
+            this.billing.Controls.Add(this.billingEnd);
+            this.billing.Controls.Add(this.billingStart);
+            this.billing.Controls.Add(this.label4);
+            this.billing.Controls.Add(this.label3);
+            this.billing.Location = new System.Drawing.Point(4, 25);
+            this.billing.Name = "billing";
+            this.billing.Size = new System.Drawing.Size(846, 496);
+            this.billing.TabIndex = 2;
+            this.billing.Text = "Billing";
+            this.billing.UseVisualStyleBackColor = true;
             // 
-            // dateTimePicker2
+            // listView1
             // 
-            this.dateTimePicker2.Location = new System.Drawing.Point(686, 139);
-            this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.Size = new System.Drawing.Size(146, 22);
-            this.dateTimePicker2.TabIndex = 2;
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(37, 19);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(624, 459);
+            this.listView1.TabIndex = 5;
+            this.listView1.UseCompatibleStateImageBehavior = false;
             // 
-            // label5
+            // billingSearch
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(683, 56);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(80, 16);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "Start Period:";
+            this.billingSearch.Location = new System.Drawing.Point(670, 178);
+            this.billingSearch.Name = "billingSearch";
+            this.billingSearch.Size = new System.Drawing.Size(144, 32);
+            this.billingSearch.TabIndex = 4;
+            this.billingSearch.Text = "Search";
+            this.billingSearch.UseVisualStyleBackColor = true;
             // 
-            // label6
+            // billingEnd
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(686, 120);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(77, 16);
-            this.label6.TabIndex = 4;
-            this.label6.Text = "End Period:";
+            this.billingEnd.CustomFormat = "dd/MM/yyyy";
+            this.billingEnd.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.billingEnd.Location = new System.Drawing.Point(670, 100);
+            this.billingEnd.Name = "billingEnd";
+            this.billingEnd.Size = new System.Drawing.Size(158, 22);
+            this.billingEnd.TabIndex = 3;
             // 
-            // completedSearch
+            // billingStart
             // 
-            this.completedSearch.Location = new System.Drawing.Point(689, 209);
-            this.completedSearch.Name = "completedSearch";
-            this.completedSearch.Size = new System.Drawing.Size(142, 36);
-            this.completedSearch.TabIndex = 5;
-            this.completedSearch.Text = "Search";
-            this.completedSearch.UseVisualStyleBackColor = true;
-            this.completedSearch.Click += new System.EventHandler(this.completedSearch_Click);
+            this.billingStart.CustomFormat = "dd/MM/yyyy";
+            this.billingStart.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.billingStart.Location = new System.Drawing.Point(670, 38);
+            this.billingStart.Name = "billingStart";
+            this.billingStart.Size = new System.Drawing.Size(161, 22);
+            this.billingStart.TabIndex = 2;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(667, 81);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(77, 16);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "End Period:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(667, 19);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(80, 16);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Start Period:";
+            // 
+            // printDocument1
+            // 
+            this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
+            // 
+            // printDialog1
+            // 
+            this.printDialog1.UseEXDialog = true;
             // 
             // POSService
             // 
@@ -489,7 +545,7 @@
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "POSService";
-            this.Text = "POS Service for Anna S.";
+            this.Text = "Timesheet";
             this.tabControl1.ResumeLayout(false);
             this.jobEntry.ResumeLayout(false);
             this.jobEntry.PerformLayout();
@@ -527,8 +583,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DateTimePicker jobDate;
         private System.Windows.Forms.Button billingSearch;
-        private System.Windows.Forms.DateTimePicker endPeriod;
-        private System.Windows.Forms.DateTimePicker startPeriod;
+        private System.Windows.Forms.DateTimePicker billingEnd;
+        private System.Windows.Forms.DateTimePicker billingStart;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox categoryList;
@@ -544,8 +600,13 @@
         private System.Windows.Forms.Button completedSearch;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.DateTimePicker dateTimePicker2;
+        private System.Windows.Forms.DateTimePicker completedEnd;
         private System.Windows.Forms.DateTimePicker completedStart;
+        private System.Windows.Forms.Button saveDatabase;
+        private System.Windows.Forms.Button PrintSetup;
+        private System.Windows.Forms.Button Print;
+        private System.Drawing.Printing.PrintDocument printDocument1;
+        private System.Windows.Forms.PrintDialog printDialog1;
     }
 }
 
